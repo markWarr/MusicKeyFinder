@@ -1,0 +1,38 @@
+﻿<Properties StartupConfiguration="{8BC970CB-C0D1-42ED-8532-5ED4975B1C79}|Default">
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="KeyFinderTests.cs">
+    <Files>
+      <File FileName="UnitTest1.cs" Line="10" Column="10" />
+      <File FileName="GlobalUsings.cs" Line="2" Column="1" />
+      <File FileName="KeyFinder.cs" Line="6" Column="21" />
+      <File FileName="Specs.txt" Line="2" Column="33" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="MusicKeyFinder" expanded="True">
+            <Node name="MusicKeyFinder" expanded="True">
+              <Node name="KeyFinderTests.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+      <Pad Id="MonoDevelop.UnitTesting.TestPad">
+        <State name="__root__">
+          <Node name="MusicKeyFinder">
+            <Node name="MusicKeyFinder" selected="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.ItemProperties.MusicKeyFinder PreferredExecutionTarget="MonoDevelop.Default" />
+</Properties>

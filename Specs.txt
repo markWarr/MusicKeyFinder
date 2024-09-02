@@ -1,0 +1,20 @@
+﻿If chord E then suggest Keys E, B, A
+If chords A, Bm then suggest key A
+
+
+
+
+Ab	Ab	Bbm	Cm	Db	Eb	Fm	Gdim
+A	A	Bm	C#m	D	E	F#m	G#dim
+Bb	Bb	Cm	Dm	Eb	F	Gm	Adim
+B	B	C#m	D#m	E	F#	G#m	A#dim
+C	C	Dm	Em	F	G	Am	Bdim
+C#	C#	D#m	E#m	F#	G#	A#m	B#dim
+Db	Db	Ebm	Fm	Gb	Ab	Bbm	Cdim
+D	D	Em	F#m	G	A	Bm	C#dim
+Eb	Eb	Fm	Gm	Ab	Bb	Cm	Ddim
+E	E	F#m	G#m	A	B	C#m	D#dim
+F	F	Gm	Am	Bb	C	Dm	Edim
+F#	F#	G#m	A#m	B	C#	D#m	E#dim
+Gb	Gb	Abm	Bbm	Cb	Db	Ebm	Fdim
+G	G	Am	Bm	C	D	Em	F#dim
