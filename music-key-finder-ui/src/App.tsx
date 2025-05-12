@@ -67,7 +67,8 @@ function App() {
 
   return (
     <div className="container">
-      <h1>Music Key Finder</h1>
+      <h1>Musical Key Finder Tool</h1>
+      <h2>Add the chords in your song below</h2>
       
       <div className="chord-input">
         <input

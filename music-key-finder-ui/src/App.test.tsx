@@ -8,7 +8,7 @@ describe('App', () => {
     });
 
     it('should render the title', () => {
-        expect(screen.getByRole('heading', { name: /music key finder/i })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { name: /musical key finder tool/i })).toBeInTheDocument();
     });
 
     it('should add a chord when entered', () => {
