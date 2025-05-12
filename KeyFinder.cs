@@ -1,57 +1,60 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+
 namespace MusicKeyFinder
 {
 	public class KeyFinder
 	{
-       string[,] keys = {
-            {"Ab", "Bbm", "Cm", "Db", "Eb", "Fm", "Gdim"},
-            {"Ab", "Bbm", "Cm", "Db", "Eb", "Fm", "Gdim"},
-            {"A", "Bm",  "C#m", "D", "E", "F#m", "G#dim"},
-            {"Bb","Cm", "Dm", "Eb","F",  "Gm",  "Adim"},
-            {"B", "C#m","D#m", "E", "F#", "G#m", "A#dim"},
-            {"C", "Dm", "Em", "F", "G", "Am", "Bdim"},
-            {"C#", "D#m", "E#m", "F#", "G#", "A#m", "B#dim"},
-            {"Db", "Ebm", "Fm", "Gb", "Ab", "Bbm", "Cdim"},
-            {"D", "Em", "F#m", "G", "A", "Bm", "C#dim"},
-            {"Eb", "Fm", "Gm", "Ab", "Bb", "Cm", "Ddim"},
-            {"E", "F#m", "G#m", "A", "B", "C#m", "D#dim"},
-            {"F", "Gm", "Am", "Bb", "C", "Dm", "Edim"},
-            {"F#", "G#m", "A#m", "B", "C#", "D#m", "E#dim"},
-            {"Gb", "Abm", "Bbm", "Cb", "Db", "Ebm", "Fdim"},
-            {"G", "Am", "Bm", "C", "D", "Em", "F#dim"},
-        };
+		private static readonly ReadOnlyCollection<(string Key, HashSet<string> Chords)> _keyData;
 
-		public KeyFinder()
+		static KeyFinder()
 		{
+			var rawKeys = new string[,]
+			{
+				{"Ab", "Bbm", "Cm", "Db", "Eb", "Fm", "Gdim"},
+				{"A", "Bm", "C#m", "D", "E", "F#m", "G#dim"},
+				{"Bb", "Cm", "Dm", "Eb", "F", "Gm", "Adim"},
+				{"B", "C#m", "D#m", "E", "F#", "G#m", "A#dim"},
+				{"C", "Dm", "Em", "F", "G", "Am", "Bdim"},
+				{"C#", "D#m", "E#m", "F#", "G#", "A#m", "B#dim"},
+				{"Db", "Ebm", "Fm", "Gb", "Ab", "Bbm", "Cdim"},
+				{"D", "Em", "F#m", "G", "A", "Bm", "C#dim"},
+				{"Eb", "Fm", "Gm", "Ab", "Bb", "Cm", "Ddim"},
+				{"E", "F#m", "G#m", "A", "B", "C#m", "D#dim"},
+				{"F", "Gm", "Am", "Bb", "C", "Dm", "Edim"},
+				{"F#", "G#m", "A#m", "B", "C#", "D#m", "E#dim"},
+				{"Gb", "Abm", "Bbm", "Cb", "Db", "Ebm", "Fdim"},
+				{"G", "Am", "Bm", "C", "D", "Em", "F#dim"},
+			};
 
-        }
+			_keyData = Enumerable.Range(0, rawKeys.GetLength(0))
+				.Select(i => (
+					Key: rawKeys[i, 0],
+					Chords: new HashSet<string>(
+						Enumerable.Range(0, rawKeys.GetLength(1))
+							.Select(j => rawKeys[i, j]),
+						StringComparer.OrdinalIgnoreCase
+					)
+				))
+				.ToList()
+				.AsReadOnly();
+		}
 
-        public string[] GetKeysFromChords(string[] chords)
-        {
-            var potentialkeys = new List<string>();
-            for(int i = 0; i < this.keys.GetLength(0); i++)
-            {
-                var chordsToSatisfy = new List<string>(chords);
-                for (int j = 0; j < this.keys.GetLength(1); j++)
-                {
-                    foreach(string chordToSatisfy in chords)
-                    {
-                        if (this.keys[i, j].ToLower().Equals(chordToSatisfy.ToLower()))
-                        {
-                            var indexToRemove = chordsToSatisfy.FindIndex(x => x.Equals(chordToSatisfy, StringComparison.OrdinalIgnoreCase));
-                            chordsToSatisfy.RemoveAt(indexToRemove);            
-                        }
-                    }
-                    if (chordsToSatisfy.Count == 0)
-                    {
-                        potentialkeys.Add(this.keys[i, 0]);
-                        break;
-                    }
+		public IEnumerable<string> GetKeysFromChords(IEnumerable<string> chords)
+		{
+			if (chords is null)
+				throw new ArgumentNullException(nameof(chords));
 
-                }
-            }
-            return potentialkeys.ToArray();
-        }
-    }
+			var inputChords = chords.ToList();
+			if (!inputChords.Any())
+				throw new ArgumentException("At least one chord must be provided.", nameof(chords));
+
+			return _keyData
+				.Where(keyData => inputChords.All(chord => keyData.Chords.Contains(chord)))
+				.Select(keyData => keyData.Key);
+		}
+	}
 }
 
