@@ -40,4 +40,13 @@ describe('getKeysFromChords', () => {
         expect(result).toContain('G');
         expect(result).toHaveLength(1);
     });
+
+    it('should identify F#m as being in the key of A major', () => {
+        const result = getKeysFromChords(['F#m']);
+        expect(result).toContain('A');
+        // F#m appears in A major, D major, and E major
+        expect(result).toContain('D');
+        expect(result).toContain('E');
+        expect(result).toHaveLength(3);
+    });
 }); 

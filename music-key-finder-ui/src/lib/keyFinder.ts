@@ -41,28 +41,32 @@ const enharmonicMap: Record<string, string> = {
 };
 
 const rawKeys: string[][] = [
-    // Ab Major / G# Major
-    ["Ab", "Bb", "Bbm", "Cm", "Db", "D#", "Eb", "Fm", "Gdim"],
+    // Ab Major
+    ["Ab", "Bbm", "Cm", "Db", "Eb", "Fm", "Gdim"],
     // A Major
-    ["A", "B", "Bm", "C#m", "D", "E", "F#m", "G#dim"],
-    // Bb Major / A# Major
-    ["Bb", "A#", "Cm", "Dm", "Eb", "D#", "F", "Gm", "Adim"],
+    ["A", "Bm", "C#m", "D", "E", "F#m", "G#dim"],
+    // Bb Major
+    ["Bb", "Cm", "Dm", "Eb", "F", "Gm", "Adim"],
     // B Major
     ["B", "C#m", "D#m", "E", "F#", "G#m", "A#dim"],
     // C Major
     ["C", "Dm", "Em", "F", "G", "Am", "Bdim"],
-    // C# Major / Db Major
-    ["C#", "Db", "D#m", "Ebm", "E#m", "Fm", "F#", "Gb", "G#", "Ab", "A#m", "Bbm", "B#dim", "Cdim"],
+    // C# Major
+    ["C#", "D#m", "E#m", "F#", "G#", "A#m", "B#dim"],
+    // Db Major
+    ["Db", "Ebm", "Fm", "Gb", "Ab", "Bbm", "Cdim"],
     // D Major
     ["D", "Em", "F#m", "G", "A", "Bm", "C#dim"],
-    // Eb Major / D# Major
-    ["Eb", "D#", "Fm", "Gm", "Ab", "G#", "Bb", "A#", "Cm", "Ddim"],
+    // Eb Major
+    ["Eb", "Fm", "Gm", "Ab", "Bb", "Cm", "Ddim"],
     // E Major
     ["E", "F#m", "G#m", "A", "B", "C#m", "D#dim"],
     // F Major
-    ["F", "Gm", "Am", "Bb", "A#", "C", "Dm", "Edim"],
-    // F# Major / Gb Major
-    ["F#", "Gb", "G#m", "Abm", "A#m", "Bbm", "B", "Cb", "C#", "Db", "D#m", "Ebm", "E#dim", "Fdim"],
+    ["F", "Gm", "Am", "Bb", "C", "Dm", "Edim"],
+    // F# Major
+    ["F#", "G#m", "A#m", "B", "C#", "D#m", "E#dim"],
+    // Gb Major
+    ["Gb", "Abm", "Bbm", "Cb", "Db", "Ebm", "Fdim"],
     // G Major
     ["G", "Am", "Bm", "C", "D", "Em", "F#dim"]
 ];
@@ -89,17 +93,16 @@ export function getKeysFromChords(chords: string[]): string[] {
         throw new Error("At least one chord must be provided.");
     }
 
-    const normalizedChords = chords.map(chord => {
-        const lowerChord = chord.toLowerCase();
-        // Check if there's an enharmonic equivalent and include both forms
-        return enharmonicMap[lowerChord] ? [lowerChord, enharmonicMap[lowerChord]] : [lowerChord];
-    }).flat();
+    const normalizedChords = chords.map(chord => chord.toLowerCase());
     
     return keyData
         .filter(({ chords: keyChords }) => 
-            normalizedChords.every(chord => 
-                keyChords.has(chord)
-            )
+            normalizedChords.every(inputChord => {
+                // Check both the chord and its enharmonic equivalent
+                if (keyChords.has(inputChord)) return true;
+                const enharmonic = enharmonicMap[inputChord];
+                return enharmonic ? keyChords.has(enharmonic) : false;
+            })
         )
         .map(({ key }) => key);
 } 
