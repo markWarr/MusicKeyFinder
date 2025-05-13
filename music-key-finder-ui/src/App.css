@@ -77,6 +77,7 @@ input {
   font-size: 1rem;
   transition: var(--transition);
   background-color: #f8fafc;
+  color: var(--text-color);
 }
 
 input:focus {
@@ -265,5 +266,10 @@ button:active {
 
   button {
     width: 100%;
+  }
+
+  input {
+    color: var(--text-color);
+    background-color: #f8fafc;
   }
 }
