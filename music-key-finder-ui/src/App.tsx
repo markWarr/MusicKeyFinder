@@ -1,5 +1,5 @@
 import { useState, type KeyboardEvent, type ChangeEvent } from 'react';
-import { getKeysFromChords, commonChords } from './lib/keyFinder';
+import { getKeysFromChords, getChordsForKey, commonChords } from './lib/keyFinder';
 import './App.css';
 
 function App() {
@@ -7,6 +7,7 @@ function App() {
   const [inputValue, setInputValue] = useState('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [error, setError] = useState('');
+  const [selectedKey, setSelectedKey] = useState<string | null>(null);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -58,12 +59,18 @@ function App() {
     }
   };
 
+  const handleKeyClick = (key: string) => {
+    setSelectedKey(selectedKey === key ? null : key);
+  };
+
   let possibleKeys: string[] = [];
   try {
     possibleKeys = chords.length > 0 ? getKeysFromChords(chords) : [];
   } catch (err) {
     console.error('Error finding keys:', err);
   }
+
+  const selectedKeyChords = selectedKey ? getChordsForKey(selectedKey) : [];
 
   return (
     <div className="container">
@@ -130,14 +137,32 @@ function App() {
           {possibleKeys.length > 0 ? (
             <div className="key-results">
               {possibleKeys.map(key => (
-                <span key={key} className="key-result">
+                <button 
+                  key={key} 
+                  className={`key-result ${selectedKey === key ? 'selected' : ''}`}
+                  onClick={() => handleKeyClick(key)}
+                  data-minor={key.endsWith('m')}
+                >
                   {key}
-                </span>
+                </button>
               ))}
             </div>
           ) : (
             <div className="error">
               No matching keys found for these chords
+            </div>
+          )}
+
+          {selectedKey && selectedKeyChords.length > 0 && (
+            <div className="key-chords-section">
+              <h3>Chords in {selectedKey} {selectedKey.endsWith('m') ? 'minor' : 'major'}:</h3>
+              <div className="chord-tags">
+                {selectedKeyChords.map(chord => (
+                  <div key={chord} className="chord-tag info">
+                    {chord}
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>

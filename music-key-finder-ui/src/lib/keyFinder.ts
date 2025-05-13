@@ -1,6 +1,7 @@
 type KeyData = {
     key: string;
     chords: Set<string>;
+    isMinor?: boolean;
 };
 
 // Mapping of enharmonic equivalents (both directions for easier lookup)
@@ -71,10 +72,22 @@ const rawKeys: string[][] = [
     ["G", "Am", "Bm", "C", "D", "Em", "F#dim"]
 ];
 
-const keyData: ReadonlyArray<KeyData> = rawKeys.map(row => ({
-    key: row[0],
-    chords: new Set(row.map(chord => chord.toLowerCase()))
-}));
+// Create both major and minor key data
+const keyData: ReadonlyArray<KeyData> = rawKeys.flatMap(row => {
+    const majorKey = {
+        key: row[0],
+        chords: new Set(row.map(chord => chord.toLowerCase()))
+    };
+    
+    // For the relative minor, we use the sixth chord (index 5) without the 'm' suffix
+    const relativeMinorKey = {
+        key: row[5].slice(0, -1), // Remove the 'm' from the sixth chord
+        chords: new Set(row.map(chord => chord.toLowerCase())),
+        isMinor: true
+    };
+    
+    return [majorKey, relativeMinorKey];
+});
 
 export const commonChords = [
     // Natural chords
@@ -95,6 +108,29 @@ export function getKeysFromChords(chords: string[]): string[] {
 
     const normalizedChords = chords.map(chord => chord.toLowerCase());
     
+    // If we have a single minor chord, prioritize it as a potential tonic
+    if (chords.length === 1 && normalizedChords[0].endsWith('m') && !normalizedChords[0].endsWith('dim')) {
+        const minorKey = normalizedChords[0].slice(0, -1); // Remove 'm' suffix
+        
+        // Find both the minor key and its relative major
+        const results: string[] = [];
+        
+        // Add the minor key
+        results.push(`${minorKey}m`);
+        
+        // Find the relative major by looking for a major key where this chord is the sixth
+        const relativeMajor = rawKeys.find(row => 
+            row[5].toLowerCase() === normalizedChords[0] // Check if our chord is the sixth chord
+        );
+        
+        if (relativeMajor) {
+            results.push(relativeMajor[0]); // Add the major key (first chord in the row)
+        }
+        
+        return results;
+    }
+    
+    // For multiple chords or non-minor chords, find all matching keys
     return keyData
         .filter(({ chords: keyChords }) => 
             normalizedChords.every(inputChord => {
@@ -104,5 +140,27 @@ export function getKeysFromChords(chords: string[]): string[] {
                 return enharmonic ? keyChords.has(enharmonic) : false;
             })
         )
-        .map(({ key }) => key);
+        .map(({ key, isMinor }) => isMinor ? `${key}m` : key);
+}
+
+export function getChordsForKey(key: string): string[] {
+    // Handle both major and minor keys
+    const isMinor = key.endsWith('m');
+    const baseKey = isMinor ? key.slice(0, -1) : key;
+    
+    let matchingRow: string[] | undefined;
+    
+    if (isMinor) {
+        // For minor keys, find the relative major key where this is the sixth chord
+        matchingRow = rawKeys.find(row => 
+            row[5].slice(0, -1).toLowerCase() === baseKey.toLowerCase()
+        );
+    } else {
+        // For major keys, find the row where this is the first chord
+        matchingRow = rawKeys.find(row => 
+            row[0].toLowerCase() === baseKey.toLowerCase()
+        );
+    }
+    
+    return matchingRow || [];
 } 
