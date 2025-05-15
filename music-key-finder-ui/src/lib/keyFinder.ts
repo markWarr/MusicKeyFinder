@@ -155,6 +155,14 @@ export function getChordsForKey(key: string): string[] {
         matchingRow = rawKeys.find(row => 
             row[5].slice(0, -1).toLowerCase() === baseKey.toLowerCase()
         );
+        
+        if (matchingRow) {
+            // Reorder chords to start with the minor key
+            // Original order: [major, IIm, IIIm, IV, V, VIm, VIIdim]
+            // New order: [VIm (now Im), VIIdim (now IIdim), I (now bIII), IIm (now IVm), IIIm (now Vm), IV (now bVI)]
+            const [major, IIm, IIIm, IV, V, VIm] = matchingRow;
+            return [VIm, matchingRow[6], major, IIm, IIIm, IV, V];
+        }
     } else {
         // For major keys, find the row where this is the first chord
         matchingRow = rawKeys.find(row => 

@@ -7,6 +7,7 @@ const NOTE_FREQUENCIES: { [key: string]: number } = {
     'D#4': 311.13,
     'Eb4': 311.13,
     'E4': 329.63,
+    'E#4': 349.23,  // E# is enharmonically equivalent to F
     'F4': 349.23,
     'F#4': 369.99,
     'Gb4': 369.99,
@@ -17,6 +18,8 @@ const NOTE_FREQUENCIES: { [key: string]: number } = {
     'A#4': 466.16,
     'Bb4': 466.16,
     'B4': 493.88,
+    'B#4': 523.25,  // B# is enharmonically equivalent to C5
+    'Cb4': 493.88,  // Cb is enharmonically equivalent to B
 };
 
 // Map chord names to their constituent notes
@@ -29,6 +32,7 @@ const CHORD_NOTES: { [key: string]: string[] } = {
     'D#': ['D#4', 'G4', 'A#4'],
     'Eb': ['Eb4', 'G4', 'Bb4'],
     'E': ['E4', 'G#4', 'B4'],
+    'E#': ['E#4', 'A4', 'C4'],  // E# is enharmonically F
     'F': ['F4', 'A4', 'C4'],
     'F#': ['F#4', 'A#4', 'C#4'],
     'Gb': ['Gb4', 'Bb4', 'Db4'],
@@ -39,6 +43,8 @@ const CHORD_NOTES: { [key: string]: string[] } = {
     'A#': ['A#4', 'D4', 'F4'],
     'Bb': ['Bb4', 'D4', 'F4'],
     'B': ['B4', 'D#4', 'F#4'],
+    'B#': ['B#4', 'D#4', 'F#4'],  // B# is enharmonically C
+    'Cb': ['Cb4', 'Eb4', 'Gb4'],  // Cb is enharmonically B
     // Minor chords
     'Cm': ['C4', 'Eb4', 'G4'],
     'C#m': ['C#4', 'E4', 'G#4'],
@@ -47,6 +53,7 @@ const CHORD_NOTES: { [key: string]: string[] } = {
     'D#m': ['D#4', 'F#4', 'A#4'],
     'Ebm': ['Eb4', 'Gb4', 'Bb4'],
     'Em': ['E4', 'G4', 'B4'],
+    'E#m': ['E#4', 'G#4', 'B#4'],  // E#m is enharmonically Fm
     'Fm': ['F4', 'Ab4', 'C4'],
     'F#m': ['F#4', 'A4', 'C#4'],
     'Gbm': ['Gb4', 'Bb4', 'Db4'],
@@ -57,6 +64,8 @@ const CHORD_NOTES: { [key: string]: string[] } = {
     'A#m': ['A#4', 'C#4', 'F4'],
     'Bbm': ['Bb4', 'Db4', 'F4'],
     'Bm': ['B4', 'D4', 'F#4'],
+    'B#m': ['B#4', 'D#4', 'F#4'],  // B#m is enharmonically Cm
+    'Cbm': ['Cb4', 'D4', 'E4'],    // Cbm is enharmonically Bm
     // Diminished chords
     'Cdim': ['C4', 'Eb4', 'Gb4'],
     'C#dim': ['C#4', 'E4', 'G4'],
@@ -65,6 +74,7 @@ const CHORD_NOTES: { [key: string]: string[] } = {
     'D#dim': ['D#4', 'F#4', 'A4'],
     'Ebdim': ['Eb4', 'Gb4', 'A4'],
     'Edim': ['E4', 'G4', 'Bb4'],
+    'E#dim': ['E#4', 'G#4', 'B4'],  // Added E#dim
     'Fdim': ['F4', 'Ab4', 'B4'],
     'F#dim': ['F#4', 'A4', 'C4'],
     'Gbdim': ['Gb4', 'Bb4', 'Db4'],
@@ -75,6 +85,8 @@ const CHORD_NOTES: { [key: string]: string[] } = {
     'A#dim': ['A#4', 'C#4', 'E4'],
     'Bbdim': ['Bb4', 'Db4', 'E4'],
     'Bdim': ['B4', 'D4', 'F4'],
+    'B#dim': ['B#4', 'D#4', 'F#4'],  // B#dim is enharmonically Cdim
+    'Cbdim': ['Cb4', 'Eb4', 'Gb4'],  // Cbdim is enharmonically Bdim
 };
 
 let audioContext: AudioContext | null = null;
