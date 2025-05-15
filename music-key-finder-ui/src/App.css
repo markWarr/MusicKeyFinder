@@ -281,3 +281,19 @@ button:active {
     background-color: #f8fafc;
   }
 }
+
+.chord-tag.info {
+  background-color: var(--success-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chord-tag.info:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(46, 204, 113, 0.3);
+}
+
+.chord-tag.info:active {
+  transform: translateY(0);
+  background-color: #27ae60;
+}

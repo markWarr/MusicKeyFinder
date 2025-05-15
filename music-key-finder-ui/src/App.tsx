@@ -1,5 +1,6 @@
 import { useState, type KeyboardEvent, type ChangeEvent } from 'react';
 import { getKeysFromChords, getChordsForKey, commonChords } from './lib/keyFinder';
+import { playChord } from './lib/audioUtils';
 import './App.css';
 
 function App() {
@@ -158,9 +159,14 @@ function App() {
               <h3>Chords in {selectedKey} {selectedKey.endsWith('m') ? 'minor' : 'major'}:</h3>
               <div className="chord-tags">
                 {selectedKeyChords.map(chord => (
-                  <div key={chord} className="chord-tag info">
+                  <button 
+                    key={chord} 
+                    className="chord-tag info"
+                    onClick={() => playChord(chord)}
+                    title="Click to play chord"
+                  >
                     {chord}
-                  </div>
+                  </button>
                 ))}
               </div>
             </div>
